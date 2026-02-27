@@ -1,0 +1,77 @@
+#include<stdio.h>
+
+int linearSearch(int arr[],int n,int key){
+for(int i=0;i<n;i++)
+    if(arr[i]==key)
+        return i;
+}
+
+int binarySearch(int arr[],int n,int key){
+int low=0, high=n-1;
+while(low<=high){
+    int mid=(low+high)/2;
+    if(arr[mid]==key)
+        return mid;
+    else if(arr[mid]<key)
+        low=mid+1;
+    else 
+        high=mid-1;
+}
+return -1;
+}
+
+int main() {
+int n, key, choice;
+printf("Enter number of elements: ");
+scanf("%d", &n);
+int arr[n];
+int result;
+
+printf("Enter %d elements:\n",n);
+for(int i=0; i<n;i++) {
+ scanf("%d",&arr[i]);
+    }
+
+printf("Enter element to search:");
+scanf("%d",&key);
+
+printf("\nChoose Search Method:\n");
+printf("1.Linear Search\n");
+printf("2.Binary Search\n");
+printf("Enter choice:");
+scanf("%d",&choice);
+
+switch(choice) {
+case 1: result = linearSearch(arr, n, key);
+        if(result!=-1)
+           printf("Element found at index %d using Linear Search.\n", result);
+        else
+           printf("Element not found using Linear Search.\n");
+        break;
+
+case 2: result = binarySearch(arr, n, key);
+        if(result!=-1)
+            printf("Element found at index %d using Binary Search.\n",result);
+        else
+            printf("Element not found using Binary Search.\n");
+        break;
+
+default:printf("Invalid choice");
+}
+return 0;
+}
+
+OUTPUT:
+Enter number of elements: 4
+Enter 4 elements:
+1 2 3 4
+Enter element to search:3
+
+Choose Search Method:
+1.Linear Search
+2.Binary Search
+Enter choice:2
+Element found at index 2 using Binary Search.
+
+
+=== Code Execution Successful ===
