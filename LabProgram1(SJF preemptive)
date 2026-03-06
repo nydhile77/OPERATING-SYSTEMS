@@ -1,0 +1,72 @@
+#include <stdio.h>
+
+int main() {
+    int n, at[10], bt[10], rt[10], ct[10], tat[10], wt[10];
+    int i, time = 0, completed = 0, min, index;
+    float avg_tat = 0, avg_wt = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++) {
+        printf("Enter AT and BT for P%d: ", i+1);
+        scanf("%d %d", &at[i], &bt[i]);
+        rt[i] = bt[i];   // remaining time = burst time initially
+    }
+
+    while(completed < n) {
+        min = 9999;
+        index = -1;
+
+        for(i = 0; i < n; i++) {
+            if(at[i] <= time && rt[i] > 0 && rt[i] < min) {
+                min = rt[i];
+                index = i;
+            }
+        }
+
+        if(index == -1) {
+            time++;
+        } else {
+            rt[index]--;   // execute for 1 unit
+            time++;
+
+            if(rt[index] == 0) {
+                ct[index] = time;
+                tat[index] = ct[index] - at[index];
+                wt[index] = tat[index] - bt[index];
+
+                avg_tat += tat[index];
+                avg_wt += wt[index];
+
+                completed++;
+            }
+        }
+    }
+
+    printf("\nP\tAT\tBT\tCT\tTAT\tWT\n");
+    for(i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n", i+1, at[i], bt[i], ct[i], tat[i], wt[i]);
+    }
+
+    printf("\nAverage TAT = %.2f", avg_tat/n);
+    printf("\nAverage WT = %.2f\n", avg_wt/n);
+    printf("nydhile nagaraj 1WA24CS195");
+
+    return 0;
+}
+
+OUTPUT:
+Enter number of processes: 2
+Enter AT and BT for P1: 3 4
+Enter AT and BT for P2: 5 6
+
+P	AT	BT	CT	TAT	WT
+P1	3	4	7	4	0
+P2	5	6	13	8	2
+
+Average TAT = 6.00
+Average WT = 1.00
+nydhile nagaraj 1WA24CS195
+
+=== Code Execution Successful ===
