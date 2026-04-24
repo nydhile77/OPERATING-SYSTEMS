@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <semaphore.h>
+
+#define SIZE 5
+
+int stack[SIZE];
+int top = -1;
+
+sem_t empty, full, mutex;
+
+void produce(int item) {
+    sem_wait(&empty);
+    sem_wait(&mutex);
+
+    top++;
+    stack[top] = item;
+    printf("Producer has produced: Item %d\n", item);
+
+    sem_post(&mutex);
+    sem_post(&full);
+}
+
+void consume() {
+    sem_wait(&full);
+    sem_wait(&mutex);
+
+    int item = stack[top];
+    top--;
+    printf("Consumer has consumed: Item %d\n", item);
+
+    sem_post(&mutex);
+    sem_post(&empty);
+}
+
+int main() {
+    int choice, item;
+
+    sem_init(&empty, 0, SIZE);
+    sem_init(&full, 0, 0);
+    sem_init(&mutex, 0, 1);
+
+    while (1) {
+        printf("\n1. Producer\n2. Consumer\n3. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                if (top == SIZE - 1) {
+                    printf("Buffer is FULL!\n");
+                } else {
+                    printf("Enter item: ");
+                    scanf("%d", &item);
+                    produce(item);
+                }
+                break;
+
+            case 2:
+                if (top == -1) {
+                    printf("Buffer is EMPTY!\n");
+                } else {
+                    consume();
+                }
+                break;
+
+            case 3:
+                printf("Exiting...\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
+OUTPUT:
+1. Producer
+2. Consumer
+3. Exit
+Enter choice: 2
+Buffer is EMPTY!
+
+1. Producer
+2. Consumer
+3. Exit
+Enter choice: 1
+Enter item: 1
+Producer has produced: Item 1
+
+1. Producer
+2. Consumer
+3. Exit
+Enter choice: 1
+Enter item: 3
+Producer has produced: Item 3
+
+1. Producer
+2. Consumer
+3. Exit
+Enter choice: 
+=== Session Ended. Please Run the code again ===
